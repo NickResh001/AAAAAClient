@@ -1,5 +1,4 @@
-﻿import React, { useState } from 'react'
-import { regionsList } from '../RegionList/RegionList'
+import React, { useState } from 'react'
 import { Form, Input, Select, Modal, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
@@ -12,36 +11,32 @@ const onFinish = (values) => {
   };
 
 /**
- * Компонент react для добавления городов.
- * @param {*} addSettlement метод добавления нового города в представление.
+ * Компонент react для добавления регионов.
+ * @param {*} addSettlement метод добавления нового региона в представление.
  * @param {*} user текщуий пользователь системы.
  * @returns 
  */
-const SettlementCreate = ({ addSettlement, user }) =>
+const RegionCreate = ({ addRegion, user }) =>
 {
     const [title, setTitle] = useState("");
-    const [regionFK, setRegionFK] = useState(-1)
-    
+
     /* const handleSubmit = (e) =>
     {
         e.preventDefault()
         const title = e.target.elements.title.value
-        const regionTitle = e.target.elements.regionTitle.value
-        const settlementDTO =
+        const regionDTO =
         {
-            title: title,
-            regionFK : regionTitle
+            title: title
         }
-       
-        const createSettlement = async () =>
+        const createRegion = async () =>
         {
             const requestOptions =
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(settlementDTO)
+                body: JSON.stringify(regionDTO)
             }
-            const response = await fetch("https://localhost:7082/api/Settlement/",
+            const response = await fetch("https://localhost:7082/api/Region/",
                 requestOptions)
             return await response.json()
                 .then((data) =>
@@ -50,42 +45,40 @@ const SettlementCreate = ({ addSettlement, user }) =>
                     // response.status === 201 && addBlog(data)
                     if (response.ok)
                     {
-                        addSettlement(data)
+                        addRegion(data)
                         //e.target.elements.title.value = ""
                     }
                 },
                     (error) => console.log(error)
                 )
         }
-        createSettlement()
+        createRegion()
     } */
-
+    
     /**
-     * Метод подтверждения добавления города. 
+     * Метод подтверждения добавления региона. 
      */
     const buttonCreate = (e) =>
     {
         e.preventDefault()
         const title1 = title
-        const regionFK1 = regionFK
-        const settlementDTO =
+        const regionDTO =
         {
-            title: title1,
-            regionFK : regionFK1
-        } 
+            title: title1
+        }
         /**
         * Вызов POST-запроса в Swagger.
         * @returns 
         */
-        const createSettlement = async () =>
+        const createRegion = async () =>
         {
             const requestOptions =
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(settlementDTO),
+                body: JSON.stringify(regionDTO),
             }
-            const response = await fetch("api/Settlement/",
+            const response = await fetch("api/Region/",
                 requestOptions)
             return await response.json()
                 .then((data) =>
@@ -94,21 +87,21 @@ const SettlementCreate = ({ addSettlement, user }) =>
                     // response.status === 201 && addBlog(data)
                     if (response.ok)
                     {
-                        addSettlement(data)
+                        addRegion(data)
                         //e.target.elements.title.value = ""
                     }
                 },
                     (error) => console.log(error)
                 )
         }
-        createSettlement()
+        createRegion()
     }
 
     return (
         <>
             <React.Fragment>
                 <h3 className='header-for-settlements'>
-                    <span className='common-text'>Добавление города</span>
+                    <span className='common-text'>Добавление региона</span>
                 </h3>
                 <Form
                     name="basic"
@@ -128,26 +121,11 @@ const SettlementCreate = ({ addSettlement, user }) =>
                         rules={[
                             {
                             required: true,
-                            message: 'Введите название города',
+                            message: 'Введите название региона',
                             },
                         ]}
                     >
                         <Input name="title" onInput={e => setTitle(e.target.value)}/>
-                    </Form.Item>
-                    <Form.Item
-                        label="Регион"
-                        rules={[
-                            {
-                            required: true,
-                            message: 'Выберите регион',
-                            },
-                        ]}
-                    >
-                        <Select onChange={setRegionFK}>
-                            {regionsList.map(({ regionId, title }) => (
-                                    <option key={regionId} value={regionId}>{title}</option>
-                            ))}
-                        </Select>
                     </Form.Item>
 
                     <Form.Item
@@ -160,9 +138,9 @@ const SettlementCreate = ({ addSettlement, user }) =>
                             Создать
                         </Button>
                     </Form.Item>
-                    <Button className="link-button" type="link" href="/settlements">
+                    <Button className="link-button" type="link" href="/regions">
                         <ArrowLeftOutlined />
-                        Список городов
+                        Список регионов
                     </Button>
                 </Form>
                 {/* {user.userRole == "admin" ? ( 
@@ -179,10 +157,10 @@ const SettlementCreate = ({ addSettlement, user }) =>
                             </select><br />
                             <button type="submit">Создать</button>
                         </form>
-                    
                 </>
                 ):(
                     <>
+                        
                     </>
                 )} */}
             </React.Fragment>
@@ -190,4 +168,4 @@ const SettlementCreate = ({ addSettlement, user }) =>
         
     )
 }
-export default SettlementCreate
+export default RegionCreate

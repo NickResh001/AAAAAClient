@@ -20,8 +20,11 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import Mainpage from './Components/Mainpage/Mainpage'
 import Settlement from './Components/settlement/Settlement'
 import SettlementCreate from './Components/SettlementCreate/SettlementCreate'
+import Region from './Components/Region/Region'
+import RegionCreate from './Components/RegionCreate/RegionCreate'
 import Layout from './Components/Layout/Layout'
 import Register from './Components/Register/Register'
 import LogIn from './Components/LogIn/LogIn'
@@ -31,26 +34,42 @@ import RegionsList from './Components/RegionList/RegionList'
 const App = () => {
 
     const [settlements, setSettlements] = useState([])
+    /**
+     * Метод добавления города в представление.
+     * @param {*} settlement город для добавления.
+     * @returns 
+     */
     const addSettlement = (settlement) => setSettlements([...settlements, settlement])
-    const removeSettlement = (removeId) => setSettlements(settlements.filter(({ settlementId }) =>
-        settlementId !== removeId));
+    /* const removeSettlement = (newSettlements) => setSettlements(newSettlements);
+    const updateSettlement = (newSettlements) => setSettlements(newSettlements); */
 
-    const [user, setUser] = useState({ isAuthenticated: false, userName: "" })
+    const [regions, setRegions] = useState([])
+    /**
+     * Метод добавления региона в представление.
+     * @param {*} settlement город для добавления.
+     * @returns 
+     */
+    const addRegion = (region) => setSettlements([...regions, region])
+    /* const removeRegion = (newRegions) => setRegions(newRegions);
+    const updateRegion = (newRegions) => setRegions(newRegions); */
+
+    const [user, setUser] = useState({ isAuthenticated: false, userName: "", userRole: "" })
     useEffect(() => {
         const getUser = async () => {
-            return await fetch("https://localhost:7082/api/account/isauthenticated")
+            return await fetch("api/account/isauthenticated")
                 .then((response) => {
                     response.status === 401 &&
-                        setUser({ isAuthenticated: false, userName: "" })
+                        setUser({ isAuthenticated: false, userName: "", userRole: "" })
                     return response.json()
                 })
                 .then(
                     (data) => {
                         if (
                             typeof data !== "undefined" &&
-                            typeof data.userName !== "undefined"
+                            typeof data.userName !== "undefined" &&
+                            typeof data.userRole !== "undefined"
                         ) {
-                            setUser({ isAuthenticated: true, userName: data.userName })
+                            setUser({ isAuthenticated: true, userName: data.userName, userRole: data.userRole  })
                         }
                     },
                     (error) => {
@@ -64,21 +83,62 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Layout user={user} />}>
-                    <Route index element={<h3>Main page</h3>} />
+                <Route path="/" element={<Layout user={user} setUser={setUser}/>}>
+                    <Route 
+                        path="/mainpage" 
+                        element={
+                            <>
+                                <Mainpage/>
+                            </>
+                        } 
+                    />
                     <Route
                         path="/settlements"
                         element={
                             <>
                                 <RegionsList />
-                                <SettlementCreate
-                                    user={user}
+                                {/* <SettlementCreate
                                     addSettlement={addSettlement}
-                                />
+                                    user={user}
+                                /> */}
                                 <Settlement
                                     settlements={settlements}
                                     setSettlements={setSettlements}
-                                    removeSettlement={removeSettlement}
+                                    user={user}
+                                />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/settlementCreate"
+                        element={
+                            <>
+                                <RegionsList />
+                                <SettlementCreate
+                                    addSettlement={addSettlement}
+                                    user={user}
+                                />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/regions"
+                        element={
+                            <>
+                                <Region
+                                    regions={regions}
+                                    setRegions={setRegions}
+                                    user={user}
+                                />
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/regionCreate"
+                        element={
+                            <>
+                                <RegionCreate
+                                    addRegion={addRegion}
                                     user={user}
                                 />
                             </>

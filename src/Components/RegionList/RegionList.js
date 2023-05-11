@@ -1,12 +1,20 @@
 ﻿import { useEffect } from 'react'
 export let regionsList = [{}]
+
+/**
+ * Компонент react для обращения к акутулаьным данным таблицы регионов.
+ */
 const RegionList = () => {
     useEffect(() => {
+
+        /**
+         * Вызов GET-запроса в Swagger.
+         */
         const getRegions = async () => {
             const requestOptions = {
                 method: 'GET'
             }
-            return await fetch("https://localhost:7082/api/Region",
+            return await fetch("api/Region",
 
                 requestOptions)
 
